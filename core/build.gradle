@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -43,7 +44,14 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.6.2"
     implementation "com.squareup.retrofit2:converter-gson:2.6.2"
 
+    implementation 'joda-time:joda-time:2.9.9:no-tzdb' // this excludes the timezonedb in res/raw
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    testImplementation 'org.mockito:mockito-core:2.27.0'
+    testImplementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    testImplementation 'org.mockito:mockito-inline:2.27.0'
+    testImplementation 'joda-time:joda-time:2.9.9:no-tzdb'
 }
