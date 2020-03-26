@@ -70,9 +70,12 @@ class TopListingRepositoryTest {
                 topListingService
             )
         val testObserver = TestObserver<EndlessList<TopListingElement>>()
-        Mockito.`when`(element1.id).thenReturn("1")
-        Mockito.`when`(element2.id).thenReturn("2")
-        Mockito.`when`(element3.id).thenReturn("3")
+        element1.id = "1"
+        element2.id = "2"
+        element3.id = "3"
+//        Mockito.`when`(element1.id).thenReturn("1")
+//        Mockito.`when`(element2.id).thenReturn("2")
+//        Mockito.`when`(element3.id).thenReturn("3")
 
         val topListingDto = TopListingDto(
             "Listing",

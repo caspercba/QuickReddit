@@ -9,4 +9,5 @@ interface TopListingRepository {
 
     fun loadTopListing()
     fun listData(): Observable<EndlessList<TopListingElement>>
+    fun nextPage()
 }
