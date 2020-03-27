@@ -1,13 +1,10 @@
 package com.gaspardeelias.quickreddit.core.repository.toplisting
 
-import com.gaspardeelias.quickreddit.core.kernel.Either
-import com.gaspardeelias.quickreddit.core.kernel.asRight
-import com.gaspardeelias.quickreddit.core.kernel.flatMap
+import com.gaspardeelias.quickreddit.core.kernel.*
 import com.gaspardeelias.quickreddit.core.kernel.list.EndlessList
 import com.gaspardeelias.quickreddit.core.kernel.list.EndlessListManager
 import com.gaspardeelias.quickreddit.core.kernel.list.EndlessListManagerImpl
 import com.gaspardeelias.quickreddit.core.kernel.model.BasicError
-import com.gaspardeelias.quickreddit.core.kernel.toBasicError
 import com.gaspardeelias.quickreddit.core.repository.toplisting.TopListingRepository
 import com.gaspardeelias.quickreddit.core.repository.toplisting.converters.TopListingConverter
 import com.gaspardeelias.quickreddit.core.repository.toplisting.converters.TopListingConverter.Companion.convertTopListingElement
@@ -41,17 +38,32 @@ class TopListingRepositoryImpl(val service: TopListingService) :
             .observeOn(Schedulers.io())
             .subscribeOn(Schedulers.io())
             .map {
-                val before = it.asRight()?.data?.before
-                val after = it.asRight()?.data?.after
-                var topList = it.asRight()!!.data.children.mapNotNull{
-                    convertTopListingElement(it.data)
+                if(it.isRight) {
+                    val before = it.asRight()?.data?.before
+                    val after = it.asRight()?.data?.after
+                    var topList = it.asRight()!!.data?.children?.mapNotNull {
+                        convertTopListingElement(it.data)
+                    }
+                    Either.Right(
+                        TopListingResponse(
+                            topList,
+                            before,
+                            after
+                        )
+                    ) as Either<BasicError, TopListingResponse>
+                } else {
+                    it as Either<BasicError, TopListingResponse>
                 }
-                Either.Right(TopListingResponse(topList, before, after)) as Either<BasicError, TopListingResponse>
-            }.onErrorReturn {
+            }
+            .onErrorReturn {
                 Either.Left(it.toBasicError())
             }.subscribe {
                 it.either({ basicError ->
-                    endlessManager.error(basicError.errorCode, basicError.errorMessage, basicError.exception)
+                    endlessManager.error(
+                        basicError.errorCode,
+                        basicError.errorMessage,
+                        basicError.exception
+                    )
                 }, {
                     if (append) {
                         endlessManager.append(it.elements, it.after)
