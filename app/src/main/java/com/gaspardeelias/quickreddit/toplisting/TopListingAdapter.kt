@@ -9,6 +9,7 @@ import com.gaspardeelias.quickreddit.R
 import com.gaspardeelias.quickreddit.core.repository.toplisting.model.TopListingElement
 import com.gaspardeelias.quickreddit.domain.common.BaseEndlessListAdapter2
 import com.gaspardeelias.quickreddit.domain.common.BaseEndlessListViewHolder2
+import com.gaspardeelias.quickreddit.utils.DateHelper
 import com.gaspardeelias.quickreddit.utils.loadCroppedImage
 
 class TopListingAdapter(val onClick: (element: TopListingElement) -> Unit) :
@@ -18,7 +19,7 @@ class TopListingAdapter(val onClick: (element: TopListingElement) -> Unit) :
         loaderLayout = R.layout.loading
     ) {
 
-    override fun shimmerEnabled() = true
+    override fun shimmerEnabled() = false
 
     override fun inflateCustomItemLayout(context: Context, viewType: Int): View {
         return LayoutInflater.from(context).inflate(viewType, null)
@@ -33,6 +34,7 @@ class TopListingVH(val rootView: View, val onClick: (element: TopListingElement)
     BaseEndlessListViewHolder2<TopListingElement, Nothing>(rootView) {
     private val author by lazy { itemView.findViewById<TextView>(R.id.id_author) }
     private val title by lazy { itemView.findViewById<TextView>(R.id.id_title) }
+    private val date by lazy { itemView.findViewById<TextView>(R.id.id_date) }
     private val cardview by lazy { itemView.findViewById<ImageView>(R.id.id_cardview) }
     private val thumbnail by lazy { itemView.findViewById<ImageView>(R.id.id_thumbnail) }
     private val dot by lazy { itemView.findViewById<ImageView>(R.id.id_dot) }
@@ -48,6 +50,7 @@ class TopListingVH(val rootView: View, val onClick: (element: TopListingElement)
         } else {
             dot?.visibility = View.VISIBLE
         }
+        element.createdUtc?.let { date?.text = DateHelper.getTimeAgo(rootView.context, it * 1000L)}
     }
 
 }

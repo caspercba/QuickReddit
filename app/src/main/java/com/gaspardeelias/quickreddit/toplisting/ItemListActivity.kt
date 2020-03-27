@@ -52,9 +52,10 @@ class ItemListActivity : AppCompatActivity() {
         toolbar.title = title
 
         item_detail_container?.let { twoPane = true }
-        item_list.adapter = adapter
-        var manager = item_list.layoutManager as LinearLayoutManager
-        item_list.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+        item_list?.adapter = adapter
+        var manager = item_list?.layoutManager as LinearLayoutManager
+
+        item_list?.addOnScrollListener(object: RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if(swipe_refresh.isRefreshing) {
                     return
@@ -62,7 +63,7 @@ class ItemListActivity : AppCompatActivity() {
                 val visibleItemCount = manager.childCount
                 val totalItemCount = manager.itemCount
                 val pastVisiblesItems = manager.findFirstVisibleItemPosition()
-                if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
+                if (visibleItemCount + pastVisiblesItems >= totalItemCount && totalItemCount > 1) {
                     viewModel.nextPage()
                 }
             }
@@ -73,7 +74,10 @@ class ItemListActivity : AppCompatActivity() {
         })
 
         id_dismiss?.onClick { adapter.removeAll() }
-        swipe_refresh?.setOnRefreshListener { viewModel.refresh() }
+        swipe_refresh?.setOnRefreshListener {
+            swipe_refresh?.isRefreshing = true
+            viewModel.refresh()
+        }
 
     }
 

@@ -14,10 +14,6 @@ class ItemListActivityVM(val topListingRepository: TopListingRepository): ViewMo
     var bag = CompositeDisposable()
     var liveData = MutableLiveData<EndlessList<TopListingElement>>()
 
-    init {
-        refresh()
-    }
-
     fun attach() {
         bag.add(topListingRepository.listData()
             .subscribeOn(Schedulers.io())
@@ -25,10 +21,11 @@ class ItemListActivityVM(val topListingRepository: TopListingRepository): ViewMo
             .subscribe{
                 liveData.postValue(it)
         })
+        refresh()
     }
 
     fun detach() {
-        bag.dispose()
+        bag.clear()
         bag = CompositeDisposable()
     }
 
