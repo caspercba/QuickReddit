@@ -8,7 +8,7 @@ import retrofit2.http.GET
 
 interface TopListingServiceRetrofit {
 
-    @GET("/api/top")
+    @GET("/top")
     fun getTopListing() : Observable<TopListingDto>
 
     companion object {

@@ -17,7 +17,7 @@ class QuickRedditApplication: Application() {
 
     private fun buildObjectGraphAndInject() {
         appComponent = DaggerAppComponent.builder()
-                .apiModule(ApiModule())
+                .apiModule(ApiModule(this))
                 .build()
     }
 }

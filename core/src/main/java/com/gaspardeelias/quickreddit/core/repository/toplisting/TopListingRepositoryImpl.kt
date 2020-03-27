@@ -10,6 +10,7 @@ import com.gaspardeelias.quickreddit.core.kernel.model.BasicError
 import com.gaspardeelias.quickreddit.core.kernel.toBasicError
 import com.gaspardeelias.quickreddit.core.repository.toplisting.TopListingRepository
 import com.gaspardeelias.quickreddit.core.repository.toplisting.converters.TopListingConverter
+import com.gaspardeelias.quickreddit.core.repository.toplisting.converters.TopListingConverter.Companion.convertTopListingElement
 import com.gaspardeelias.quickreddit.core.repository.toplisting.model.TopListingElement
 import com.gaspardeelias.quickreddit.core.repository.toplisting.model.TopListingResponse
 import com.gaspardeelias.quickreddit.core.service.toplisting.TopListingService
@@ -42,7 +43,9 @@ class TopListingRepositoryImpl(val service: TopListingService) :
             .map {
                 val before = it.asRight()?.data?.before
                 val after = it.asRight()?.data?.after
-                var topList = it.asRight()!!.data.children.mapNotNull(TopListingConverter.Companion::convertTopListingElement)
+                var topList = it.asRight()!!.data.children.mapNotNull{
+                    convertTopListingElement(it.data)
+                }
                 Either.Right(TopListingResponse(topList, before, after)) as Either<BasicError, TopListingResponse>
             }.onErrorReturn {
                 Either.Left(it.toBasicError())

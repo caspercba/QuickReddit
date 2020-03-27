@@ -8,10 +8,12 @@ class TopListingDto(kind: String, data: ListingDto<TopListingElementDto>) :
 data class ListingDto<T>(
     val modhash: String? = null,
     val dist: Int? = null,
-    val children: List<T> = arrayListOf(),
+    val children: List<ListingItemDto<T>> = arrayListOf(),
     val after: String? = null,
     val before: String? = null
 )
+
+data class ListingItemDto<T>(val kind: String, val data: T)
 
 open class TopListingElementDto(
     var id: String? = null,

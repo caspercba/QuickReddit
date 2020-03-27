@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="status_time_now">now</string>
+    <string name="status_time_years">years ago</string>
+    <string name="status_time_month">month ago</string>
+    <string name="status_time_months">months ago</string>
+    <string name="status_time_day">day ago</string>
+    <string name="status_time_days">days ago</string>
+    <string name="status_time_hour">hour ago</string>
+    <string name="status_time_hours">hrs ago</string>
+    <string name="status_time_minute">min ago</string>
+    <string name="status_time_minutes">mins ago</string>
+</resources>
