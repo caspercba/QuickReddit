@@ -18,5 +18,7 @@ data class ListingItemDto<T>(val kind: String, val data: T)
 open class TopListingElementDto(
     var id: String? = null,
     val authorFullname: String? = null,
-    val createdUtc: Long? = null
+    val title: String? = null,
+    val createdUtc: Long? = null,
+    val thumbnail: String? = null
 )

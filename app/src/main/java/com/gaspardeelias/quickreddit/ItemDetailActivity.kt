@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
+import com.gaspardeelias.quickreddit.core.repository.toplisting.model.TopListingElement
 import com.gaspardeelias.quickreddit.toplisting.ItemListActivity
 import kotlinx.android.synthetic.main.activity_item_detail.*
 
@@ -43,8 +44,8 @@ class ItemDetailActivity : AppCompatActivity() {
             // using a fragment transaction.
             val fragment = ItemDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ItemDetailFragment.ARG_ITEM_ID,
-                            intent.getStringExtra(ItemDetailFragment.ARG_ITEM_ID))
+                    putParcelable(ItemDetailFragment.ARG_ITEM,
+                            intent.getParcelableExtra<TopListingElement>(ItemDetailFragment.ARG_ITEM))
                 }
             }
 

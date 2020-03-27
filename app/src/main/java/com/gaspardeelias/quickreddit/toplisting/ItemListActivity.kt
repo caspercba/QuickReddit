@@ -1,9 +1,11 @@
 package com.gaspardeelias.quickreddit.toplisting
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.gaspardeelias.quickreddit.ItemDetailActivity
+import com.gaspardeelias.quickreddit.ItemDetailFragment
 import com.gaspardeelias.quickreddit.R
 import com.gaspardeelias.quickreddit.application.QuickRedditApplication
 import com.gaspardeelias.quickreddit.core.repository.toplisting.TopListingRepository
@@ -26,7 +28,25 @@ class ItemListActivity : AppCompatActivity() {
     @Inject
     lateinit var topListingRepository: TopListingRepository
 
-    val adapter = TopListingAdapter()
+    val adapter = TopListingAdapter { element ->
+
+        if (twoPane) {
+            val fragment = ItemDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(ItemDetailFragment.ARG_ITEM, element)
+                }
+            }
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.item_detail_container, fragment)
+                .commit()
+        } else {
+            val intent = Intent(this, ItemDetailActivity::class.java).apply {
+                putExtra(ItemDetailFragment.ARG_ITEM, element)
+            }
+            startActivity(intent)
+        }
+    }
 
     private var twoPane: Boolean = false
     private val viewModel: ItemListActivityVM by lazy {
