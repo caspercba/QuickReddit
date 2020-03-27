@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 import com.gaspardeelias.quickreddit.core.repository.toplisting.model.TopListingElement
 import com.gaspardeelias.quickreddit.toplisting.ItemListActivity
+import com.gaspardeelias.quickreddit.utils.loadCroppedImage
 import kotlinx.android.synthetic.main.activity_item_detail.*
 
 /**
@@ -16,6 +17,8 @@ import kotlinx.android.synthetic.main.activity_item_detail.*
  * in a [ItemListActivity].
  */
 class ItemDetailActivity : AppCompatActivity() {
+
+    var element: TopListingElement? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +41,11 @@ class ItemDetailActivity : AppCompatActivity() {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             val fragment = ItemDetailFragment().apply {
+
+                element = intent.getParcelableExtra<TopListingElement>(ItemDetailFragment.ARG_ITEM)
                 arguments = Bundle().apply {
                     putParcelable(ItemDetailFragment.ARG_ITEM,
-                            intent.getParcelableExtra<TopListingElement>(ItemDetailFragment.ARG_ITEM))
+                            element)
                 }
             }
 
@@ -48,6 +53,13 @@ class ItemDetailActivity : AppCompatActivity() {
                     .add(R.id.item_detail_container, fragment)
                     .commit()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        element?.let { loadCroppedImage(id_header_image, it.thumbnail) }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem) =
