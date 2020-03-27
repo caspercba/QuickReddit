@@ -31,7 +31,7 @@ class ItemListActivity : AppCompatActivity() {
     @Inject
     lateinit var topListingRepository: TopListingRepository
 
-    val adapter = TopListingAdapter { onElementCLick(it) }
+    val adapter = TopListingAdapter { element, action -> onElementCLick(element, action) }
 
     private var twoPane: Boolean = false
     private val viewModel: ItemListActivityVM by lazy {
@@ -91,24 +91,28 @@ class ItemListActivity : AppCompatActivity() {
         viewModel.detach()
     }
 
-    fun onElementCLick(element: TopListingElement?) {
-        element?.viewed = true
-        element?.let { adapter.updateItem(it) }
-        if (twoPane) {
-            val fragment = ItemDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(ItemDetailFragment.ARG_ITEM, element)
+    fun onElementCLick(element: TopListingElement?, action: Int) {
+        if(action == TopListingAdapter.ACTION_SEE_DETAILS) {
+            element?.viewed = true
+            element?.let { adapter.updateItem(it) }
+            if (twoPane) {
+                val fragment = ItemDetailFragment().apply {
+                    arguments = Bundle().apply {
+                        putParcelable(ItemDetailFragment.ARG_ITEM, element)
+                    }
                 }
+                supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.item_detail_container, fragment)
+                    .commit()
+            } else {
+                val intent = Intent(this, ItemDetailActivity::class.java).apply {
+                    putExtra(ItemDetailFragment.ARG_ITEM, element)
+                }
+                startActivity(intent)
             }
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.item_detail_container, fragment)
-                .commit()
         } else {
-            val intent = Intent(this, ItemDetailActivity::class.java).apply {
-                putExtra(ItemDetailFragment.ARG_ITEM, element)
-            }
-            startActivity(intent)
+            element?.let { adapter.removeItem(element) }
         }
     }
 

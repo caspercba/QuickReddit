@@ -9,15 +9,25 @@ import com.gaspardeelias.quickreddit.R
 import com.gaspardeelias.quickreddit.core.repository.toplisting.model.TopListingElement
 import com.gaspardeelias.quickreddit.domain.common.BaseEndlessListAdapter2
 import com.gaspardeelias.quickreddit.domain.common.BaseEndlessListViewHolder2
+import com.gaspardeelias.quickreddit.toplisting.TopListingAdapter.Companion.ACTION_DISMISS_ITEM
+import com.gaspardeelias.quickreddit.toplisting.TopListingAdapter.Companion.ACTION_SEE_DETAILS
 import com.gaspardeelias.quickreddit.utils.DateHelper
 import com.gaspardeelias.quickreddit.utils.loadCroppedImage
+import org.jetbrains.anko.onClick
 
-class TopListingAdapter(val onClick: (element: TopListingElement) -> Unit) :
+
+class TopListingAdapter(val onClick: (element: TopListingElement, action: Int) -> Unit) :
     BaseEndlessListAdapter2<TopListingElement, Nothing>(
         emptyLayout = R.layout.empty_list_generic,
         customLayout = R.layout.item_list_content,
         loaderLayout = R.layout.loading
     ) {
+
+    companion object {
+        val ACTION_SEE_DETAILS = 0
+        val ACTION_DISMISS_ITEM = 1
+    }
+
 
     override fun shimmerEnabled() = false
 
@@ -30,7 +40,7 @@ class TopListingAdapter(val onClick: (element: TopListingElement) -> Unit) :
     }
 }
 
-class TopListingVH(val rootView: View, val onClick: (element: TopListingElement) -> Unit) :
+class TopListingVH(val rootView: View, val onClick: (element: TopListingElement, action: Int) -> Unit) :
     BaseEndlessListViewHolder2<TopListingElement, Nothing>(rootView) {
     private val author by lazy { itemView.findViewById<TextView>(R.id.id_author) }
     private val title by lazy { itemView.findViewById<TextView>(R.id.id_title) }
@@ -38,19 +48,23 @@ class TopListingVH(val rootView: View, val onClick: (element: TopListingElement)
     private val cardview by lazy { itemView.findViewById<ImageView>(R.id.id_cardview) }
     private val thumbnail by lazy { itemView.findViewById<ImageView>(R.id.id_thumbnail) }
     private val dot by lazy { itemView.findViewById<ImageView>(R.id.id_dot) }
+    private val dismissButton by lazy { itemView.findViewById<View>(R.id.dismiss_container) }
 
 
     override fun bindCustomView(element: TopListingElement, viewState: Nothing?) {
         author?.text = element.author
         title?.text = element.title
         loadCroppedImage(thumbnail, element.thumbnail)
-        rootView.setOnClickListener { onClick(element) }
+        rootView.setOnClickListener { onClick(element, ACTION_SEE_DETAILS) }
         if (element.viewed) {
             dot?.visibility = View.GONE
         } else {
             dot?.visibility = View.VISIBLE
         }
         element.createdUtc?.let { date?.text = DateHelper.getTimeAgo(rootView.context, it * 1000L)}
+        dismissButton?.onClick {
+            onClick(element, ACTION_DISMISS_ITEM)
+        }
     }
 
 }

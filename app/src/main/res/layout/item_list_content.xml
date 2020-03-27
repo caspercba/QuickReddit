@@ -7,7 +7,7 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/id_cardview_main"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
+        android:layout_height="150dp"
         android:layout_margin="10dp"
         android:layout_marginBottom="0dp"
 
@@ -27,27 +27,27 @@
                 android:id="@+id/author_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true">
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/id_dot"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_dot"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
                     android:tint="@color/red" />
 
                 <TextView
                     android:id="@+id/id_author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:layout_toRightOf="@id/id_dot"
                     android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@id/id_dot"
+                    android:ellipsize="end"
                     android:lines="1"
                     android:paddingLeft="10dp"
                     android:textAppearance="?attr/textAppearanceListItem"
@@ -59,18 +59,19 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
-                    android:textSize="14dp"
-                    android:textColor="@color/grey_light"/>
+                    android:textColor="@color/grey_light"
+                    android:textSize="14dp" />
 
             </RelativeLayout>
 
 
             <RelativeLayout
+                android:id="@+id/data_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_below="@id/author_container"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@id/author_container">
+                android:layout_marginTop="10dp">
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/id_cardview"
@@ -84,7 +85,7 @@
                         android:id="@+id/id_thumbnail"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="centerCrop" />
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -99,6 +100,37 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp" />
             </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/dismiss_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/data_container"
+                android:layout_alignParentLeft="true"
+                android:paddingTop="5dp"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/ic_remove"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="centerCrop"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:text="Dismiss"
+                    android:textSize="18dp"
+                    android:layout_gravity="center_vertical"/>
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/id_num_comments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"/>
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
