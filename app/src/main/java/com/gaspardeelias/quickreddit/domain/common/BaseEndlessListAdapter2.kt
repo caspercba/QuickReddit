@@ -79,6 +79,10 @@ open class BaseEndlessListAdapter2<T : WithEntityId, VS>(
         update(EndlessList.Ready<T>(newList))
     }
 
+    fun removeAll() {
+        update(EndlessList.Ready(arrayListOf()))
+    }
+
 
     fun removeItem(item: T) {
         val newList = arrayListOf<T>()

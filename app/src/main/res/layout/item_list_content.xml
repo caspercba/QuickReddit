@@ -8,7 +8,9 @@
         android:id="@+id/id_cardview_main"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:layout_marginBottom="10dp"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="0dp"
+
         android:background="@color/red"
         app:cardCornerRadius="5dp"
         app:strokeColor="@color/grey"
@@ -28,7 +30,7 @@
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/appCompatImageView"
+                    android:id="@+id/id_dot"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:layout_gravity="center"

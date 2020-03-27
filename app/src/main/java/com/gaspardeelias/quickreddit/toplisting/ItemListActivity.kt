@@ -9,10 +9,11 @@ import com.gaspardeelias.quickreddit.ItemDetailFragment
 import com.gaspardeelias.quickreddit.R
 import com.gaspardeelias.quickreddit.application.QuickRedditApplication
 import com.gaspardeelias.quickreddit.core.repository.toplisting.TopListingRepository
+import com.gaspardeelias.quickreddit.core.repository.toplisting.model.TopListingElement
 import com.gaspardeelias.quickreddit.domain.getViewModelFromActivity
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.item_list.*
+import org.jetbrains.anko.onClick
 import javax.inject.Inject
 
 /**
@@ -28,25 +29,7 @@ class ItemListActivity : AppCompatActivity() {
     @Inject
     lateinit var topListingRepository: TopListingRepository
 
-    val adapter = TopListingAdapter { element ->
-
-        if (twoPane) {
-            val fragment = ItemDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(ItemDetailFragment.ARG_ITEM, element)
-                }
-            }
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.item_detail_container, fragment)
-                .commit()
-        } else {
-            val intent = Intent(this, ItemDetailActivity::class.java).apply {
-                putExtra(ItemDetailFragment.ARG_ITEM, element)
-            }
-            startActivity(intent)
-        }
-    }
+    val adapter = TopListingAdapter { onElementCLick(it) }
 
     private var twoPane: Boolean = false
     private val viewModel: ItemListActivityVM by lazy {
@@ -66,23 +49,16 @@ class ItemListActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.title = title
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-
-        if (item_detail_container != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            twoPane = true
-        }
-
+        item_detail_container?.let { twoPane = true }
         item_list.adapter = adapter
+
         viewModel.liveData.observe(this, Observer {
             adapter.update(it)
+            swipe_refresh?.isRefreshing = false
         })
+
+        id_dismiss?.onClick { adapter.removeAll() }
+        swipe_refresh?.setOnRefreshListener { viewModel.refresh() }
     }
 
     override fun onResume() {
@@ -93,6 +69,27 @@ class ItemListActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         viewModel.detach()
+    }
+
+    fun onElementCLick(element: TopListingElement?) {
+        element?.viewed = true
+        element?.let { adapter.updateItem(it) }
+        if (twoPane) {
+            val fragment = ItemDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(ItemDetailFragment.ARG_ITEM, element)
+                }
+            }
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.item_detail_container, fragment)
+                .commit()
+        } else {
+            val intent = Intent(this, ItemDetailActivity::class.java).apply {
+                putExtra(ItemDetailFragment.ARG_ITEM, element)
+            }
+            startActivity(intent)
+        }
     }
 
 
