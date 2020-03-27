@@ -11,5 +11,6 @@ data class TopListingElement(
     val title: String? = null,
     val createdUtc: Long? = null,
     val thumbnail: String? = null,
+    val numComments: Long = 0,
     var viewed: Boolean = false
 ) : WithEntityId, Parcelable

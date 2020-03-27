@@ -15,7 +15,8 @@ class TopListingConverter {
                     author = it.author ?: "",
                     title = it.title,
                     createdUtc = it.createdUtc,
-                    thumbnail = it.thumbnail
+                    thumbnail = it.thumbnail,
+                    numComments = it.numComments
                 )
             }
     }

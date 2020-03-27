@@ -20,5 +20,6 @@ open class TopListingElementDto(
     val author: String? = null,
     val title: String? = null,
     val createdUtc: Long? = null,
-    val thumbnail: String? = null
+    val thumbnail: String? = null,
+    val numComments: Long = 0
 )

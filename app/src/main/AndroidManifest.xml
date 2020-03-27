@@ -33,6 +33,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gaspardeelias.quickreddit.toplisting.ItemListActivity" />
         </activity>
+
+        <activity android:name=".toplisting.FullScreenImageActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

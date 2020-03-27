@@ -1,14 +1,17 @@
 package com.gaspardeelias.quickreddit
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 import com.gaspardeelias.quickreddit.core.repository.toplisting.model.TopListingElement
+import com.gaspardeelias.quickreddit.toplisting.FullScreenImageActivity
 import com.gaspardeelias.quickreddit.toplisting.ItemListActivity
 import com.gaspardeelias.quickreddit.utils.loadCroppedImage
 import kotlinx.android.synthetic.main.activity_item_detail.*
+import org.jetbrains.anko.onClick
 
 /**
  * An activity representing a single Item detail screen. This
@@ -58,7 +61,12 @@ class ItemDetailActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        element?.let { loadCroppedImage(id_header_image, it.thumbnail) }
+        element?.let {
+            loadCroppedImage(id_header_image, it.thumbnail)
+            id_header_image.onClick {
+                startActivity(Intent(this, FullScreenImageActivity::class.java).apply { setData(Uri.parse(element!!.thumbnail)) })
+            }
+        }
 
     }
 

@@ -32,7 +32,7 @@ class ItemDetailFragment : Fragment() {
                 // arguments. In a real-world scenario, use a Loader
                 // to load content from a content provider.
                 item = it.getParcelable(ARG_ITEM) as TopListingElement?
-                activity?.toolbar_layout?.title = item?.title
+                activity?.toolbar_layout?.title = item?.author
             }
         }
     }
@@ -44,6 +44,7 @@ class ItemDetailFragment : Fragment() {
         // Show the dummy content as text in a TextView.
         item?.let {
             rootView.item_detail.text = it.title
+            rootView.id_num_comments.text = it.numComments.toString()
         }
 
         return rootView
