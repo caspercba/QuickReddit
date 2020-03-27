@@ -10,7 +10,6 @@ import com.gaspardeelias.quickreddit.R
 fun loadCroppedImage(imageView: ImageView, url: String?) {
     val options: RequestOptions = RequestOptions()
         .centerCrop()
-        .placeholder(R.mipmap.ic_launcher_round)
         .error(R.drawable.ic_warning)
 
 

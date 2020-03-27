@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.gaspardeelias.quickreddit.ItemDetailActivity
 import com.gaspardeelias.quickreddit.ItemDetailFragment
 import com.gaspardeelias.quickreddit.R
@@ -51,7 +53,20 @@ class ItemListActivity : AppCompatActivity() {
 
         item_detail_container?.let { twoPane = true }
         item_list.adapter = adapter
-
+        var manager = item_list.layoutManager as LinearLayoutManager
+        item_list.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if(swipe_refresh.isRefreshing) {
+                    return
+                }
+                val visibleItemCount = manager.childCount
+                val totalItemCount = manager.itemCount
+                val pastVisiblesItems = manager.findFirstVisibleItemPosition()
+                if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
+                    viewModel.nextPage()
+                }
+            }
+        })
         viewModel.liveData.observe(this, Observer {
             adapter.update(it)
             swipe_refresh?.isRefreshing = false
@@ -59,6 +74,7 @@ class ItemListActivity : AppCompatActivity() {
 
         id_dismiss?.onClick { adapter.removeAll() }
         swipe_refresh?.setOnRefreshListener { viewModel.refresh() }
+
     }
 
     override fun onResume() {

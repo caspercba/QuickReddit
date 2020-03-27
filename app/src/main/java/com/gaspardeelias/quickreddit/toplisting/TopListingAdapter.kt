@@ -39,7 +39,7 @@ class TopListingVH(val rootView: View, val onClick: (element: TopListingElement)
 
 
     override fun bindCustomView(element: TopListingElement, viewState: Nothing?) {
-        author?.text = element.authorFullname
+        author?.text = element.author
         title?.text = element.title
         loadCroppedImage(thumbnail, element.thumbnail)
         rootView.setOnClickListener { onClick(element) }

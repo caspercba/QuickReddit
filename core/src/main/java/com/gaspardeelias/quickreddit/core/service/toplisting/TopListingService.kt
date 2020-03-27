@@ -9,4 +9,5 @@ import io.reactivex.Observable
 interface TopListingService {
 
     fun getTopListing(): Observable<Either<BasicError, TopListingDto>>
+    fun nextPage(next: String): Observable<Either<BasicError, TopListingDto>>
 }

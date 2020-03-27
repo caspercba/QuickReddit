@@ -74,6 +74,11 @@ class TopListingRepositoryImpl(val service: TopListingService) :
             }
     }
 
-    override fun nextPage() {}
+    override fun nextPage() {
+        topListingManager?.nextPage?.let {
+            topListingManager.loading()
+            buildTopListingResponse(service.nextPage(it), append = true)
+        }
+    }
 
 }

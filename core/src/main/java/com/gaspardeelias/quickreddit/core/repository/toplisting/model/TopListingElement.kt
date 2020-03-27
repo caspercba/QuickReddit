@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class TopListingElement(
     override val id: String,
-    val authorFullname: String = "",
+    val author: String = "",
     val title: String? = null,
     val createdUtc: Long? = null,
     val thumbnail: String? = null,

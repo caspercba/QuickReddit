@@ -12,7 +12,7 @@ class TopListingConverter {
             } else {
                 TopListingElement(
                     it.id!!,
-                    authorFullname = it.authorFullname ?: "",
+                    author = it.author ?: "",
                     title = it.title,
                     createdUtc = it.createdUtc,
                     thumbnail = it.thumbnail
