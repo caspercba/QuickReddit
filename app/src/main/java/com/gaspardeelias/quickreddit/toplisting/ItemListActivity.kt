@@ -3,19 +3,21 @@ package com.gaspardeelias.quickreddit.toplisting
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import com.gaspardeelias.quickreddit.ItemDetailActivity
 import com.gaspardeelias.quickreddit.ItemDetailFragment
 import com.gaspardeelias.quickreddit.R
 import com.gaspardeelias.quickreddit.application.QuickRedditApplication
-import com.gaspardeelias.quickreddit.core.repository.toplisting.TopListingRepository
-import com.gaspardeelias.quickreddit.core.repository.toplisting.model.TopListingElement
-import com.gaspardeelias.quickreddit.domain.getViewModelFromActivity
+import com.gaspardeelias.quickreddit.utils.getViewModelFromActivity
+import com.gaspardeelias.repo.QuickRedditRepo
+import com.gaspardeelias.repo.model.Post
 import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.item_list.*
-import org.jetbrains.anko.onClick
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import javax.inject.Inject
 
 /**
@@ -29,21 +31,21 @@ import javax.inject.Inject
 class ItemListActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var topListingRepository: TopListingRepository
+    lateinit var quickRedditRepo: QuickRedditRepo
 
-    val adapter = TopListingAdapter { element, action -> onElementCLick(element, action) }
-
+    private lateinit var adapter : PostsAdapter
     private var twoPane: Boolean = false
+
+
     private val viewModel: ItemListActivityVM by lazy {
         getViewModelFromActivity {
-            ItemListActivityVM(
-                topListingRepository
-            )
+            ItemListActivityVM(quickRedditRepo)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_item_list)
 
         QuickRedditApplication.appComponent?.inject(this)
@@ -52,49 +54,41 @@ class ItemListActivity : AppCompatActivity() {
         toolbar.title = title
 
         item_detail_container?.let { twoPane = true }
-        item_list?.adapter = adapter
-        var manager = item_list?.layoutManager as LinearLayoutManager
 
-        item_list?.addOnScrollListener(object: RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if(swipe_refresh.isRefreshing) {
-                    return
-                }
-                val visibleItemCount = manager.childCount
-                val totalItemCount = manager.itemCount
-                val pastVisiblesItems = manager.findFirstVisibleItemPosition()
-                if (visibleItemCount + pastVisiblesItems >= totalItemCount && totalItemCount > 1) {
-                    viewModel.nextPage()
-                }
+        setupAdapter()
+        setupSwipe()
+    }
+
+    private fun setupAdapter() {
+        adapter = PostsAdapter(::onElementCLick)
+        item_list.adapter = adapter
+
+        lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest {
+                loadStates -> swipe_refresh?.isRefreshing = loadStates.refresh is LoadState.Loading
             }
-        })
-        viewModel.liveData.observe(this, Observer {
-            adapter.update(it)
-            swipe_refresh?.isRefreshing = false
-        })
-
-        id_dismiss?.onClick { adapter.removeAll() }
-        swipe_refresh?.setOnRefreshListener {
-            swipe_refresh?.isRefreshing = true
-            viewModel.refresh()
         }
 
+        lifecycleScope.launchWhenCreated {
+            viewModel.posts.collectLatest {
+                adapter.submitData(it)
+            }
+        }
+
+        lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .filter { it.refresh is LoadState.NotLoading }
+                .collect { item_list.scrollToPosition(0) }
+        }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.attach()
+    private fun setupSwipe() {
+        swipe_refresh?.setOnRefreshListener { adapter.refresh() }
     }
 
-    override fun onPause() {
-        super.onPause()
-        viewModel.detach()
-    }
 
-    fun onElementCLick(element: TopListingElement?, action: Int) {
-        if(action == TopListingAdapter.ACTION_SEE_DETAILS) {
-            element?.viewed = true
-            element?.let { adapter.updateItem(it) }
+    private fun onElementCLick(element: Post?) {
             if (twoPane) {
                 val fragment = ItemDetailFragment().apply {
                     arguments = Bundle().apply {
@@ -111,9 +105,6 @@ class ItemListActivity : AppCompatActivity() {
                 }
                 startActivity(intent)
             }
-        } else {
-            element?.let { adapter.removeItem(element) }
-        }
     }
 
 

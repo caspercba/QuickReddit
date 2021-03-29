@@ -100,32 +100,6 @@
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp" />
             </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/dismiss_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/data_container"
-                android:layout_alignParentLeft="true"
-                android:paddingTop="5dp"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    app:srcCompat="@drawable/ic_remove"
-                    android:layout_gravity="center_vertical"
-                    android:scaleType="centerCrop"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:text="Dismiss"
-                    android:textSize="18dp"
-                    android:layout_gravity="center_vertical"/>
-
-            </LinearLayout>
             <TextView
                 android:id="@+id/id_num_comments"
                 android:layout_width="wrap_content"

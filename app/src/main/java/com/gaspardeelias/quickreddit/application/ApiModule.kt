@@ -1,11 +1,9 @@
 package com.gaspardeelias.quickreddit.application
 
 import android.app.Application
-import com.gaspardeelias.quickreddit.backend.service.TopListingServiceImpl
-import com.gaspardeelias.quickreddit.backend.service.TopListingServiceRetrofit
-import com.gaspardeelias.quickreddit.core.repository.toplisting.TopListingRepository
-import com.gaspardeelias.quickreddit.core.repository.toplisting.TopListingRepositoryImpl
-import com.gaspardeelias.quickreddit.core.service.toplisting.TopListingService
+import com.gaspardeelias.repo.QuickRedditRepo
+import com.gaspardeelias.repo.QuickRedditRepoImpl
+import com.gaspardeelias.repo.net.QuickRedditRetrofit
 import com.google.gson.*
 import com.google.gson.internal.bind.DateTypeAdapter
 import dagger.Module
@@ -20,23 +18,24 @@ import javax.inject.Singleton
 @Module
 class ApiModule(val app: QuickRedditApplication) {
 
+
     @Provides
     @Singleton
-    fun providesTopListingService(retrofit: Retrofit): TopListingService {
-        return TopListingServiceImpl(TopListingServiceRetrofit.create(retrofit))
+    fun providesTopListingRepository(retrofit: Retrofit) : QuickRedditRetrofit {
+        return QuickRedditRetrofit.create(retrofit)
     }
 
     @Provides
     @Singleton
-    fun providesTopListingRepository(topListingService: TopListingService) : TopListingRepository {
-        return TopListingRepositoryImpl(topListingService)
+    fun provideQuickRedditRepo(quickRedditRetrofit: QuickRedditRetrofit)
+    : QuickRedditRepo {
+        return QuickRedditRepoImpl(quickRedditRetrofit)
     }
 
     @Provides
     @Singleton
     fun providesRetrofit2(
-        app: Application,
-        gson: Gson?
+        gson: Gson
     ): Retrofit {
         val httpClient = OkHttpClient.Builder()
         //httpClient.addInterceptor(new LogJsonInterceptor());
@@ -56,11 +55,12 @@ class ApiModule(val app: QuickRedditApplication) {
 
     @Provides
     @Singleton
-    fun provideGson(): Gson? {
+    fun provideGson(): Gson {
         return GsonBuilder()
             .serializeNulls()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .registerTypeAdapter(Date::class.java, DateTypeAdapter())
             .create()
     }
+
 }

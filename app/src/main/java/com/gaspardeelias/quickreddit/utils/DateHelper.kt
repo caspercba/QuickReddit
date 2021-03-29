@@ -1,7 +1,7 @@
 package com.gaspardeelias.quickreddit.utils
 
 import android.content.Context
-import com.gaspardeelias.quickreddit.core.R
+import com.gaspardeelias.quickreddit.R
 import org.joda.time.*
 
 class DateHelper {

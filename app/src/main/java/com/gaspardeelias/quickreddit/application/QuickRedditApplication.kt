@@ -1,7 +1,6 @@
 package com.gaspardeelias.quickreddit.application
 
 import android.app.Application
-import com.gaspardeelias.quickreddit.application.QuickRedditApplication.Companion.appComponent
 
 class QuickRedditApplication: Application() {
 
