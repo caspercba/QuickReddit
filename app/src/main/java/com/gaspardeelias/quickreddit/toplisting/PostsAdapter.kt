@@ -3,11 +3,11 @@ package com.gaspardeelias.quickreddit.toplisting
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.gaspardeelias.repo.model.TopListingElementDto
+import com.gaspardeelias.repo.model.Post
 
 
-class TopListingAdapter(val onClick: (element: TopListingElementDto, action: Int) -> Unit)
-    : PagingDataAdapter<TopListingElementDto, PostViewHolder>(COMPARATOR) {
+class PostsAdapter(val onClick: (element: Post, action: Int) -> Unit)
+    : PagingDataAdapter<Post, PostViewHolder>(COMPARATOR) {
 
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
@@ -21,14 +21,14 @@ class TopListingAdapter(val onClick: (element: TopListingElementDto, action: Int
 
 
     companion object {
-        val COMPARATOR = object : DiffUtil.ItemCallback<TopListingElementDto>() {
-            override fun areContentsTheSame(oldItem: TopListingElementDto, newItem: TopListingElementDto): Boolean =
+        val COMPARATOR = object : DiffUtil.ItemCallback<Post>() {
+            override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean =
                 oldItem.title == newItem.title
 
-            override fun areItemsTheSame(oldItem: TopListingElementDto, newItem: TopListingElementDto): Boolean =
+            override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean =
                 oldItem.title == newItem.title
 
-            override fun getChangePayload(oldItem: TopListingElementDto, newItem: TopListingElementDto): Any? {
+            override fun getChangePayload(oldItem: Post, newItem: Post): Any? {
                 return null
             }
         }

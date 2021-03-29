@@ -11,7 +11,7 @@ import com.gaspardeelias.quickreddit.R
 import com.gaspardeelias.quickreddit.application.QuickRedditApplication
 import com.gaspardeelias.quickreddit.utils.getViewModelFromActivity
 import com.gaspardeelias.repo.QuickRedditRepo
-import com.gaspardeelias.repo.model.TopListingElementDto
+import com.gaspardeelias.repo.model.Post
 import kotlinx.android.synthetic.main.activity_item_list.*
 import kotlinx.android.synthetic.main.item_list.*
 import kotlinx.coroutines.flow.collect
@@ -33,7 +33,7 @@ class ItemListActivity : AppCompatActivity() {
     @Inject
     lateinit var quickRedditRepo: QuickRedditRepo
 
-    private lateinit var adapter : TopListingAdapter
+    private lateinit var adapter : PostsAdapter
     //val adapter = TopListingAdapter { element, action -> onElementCLick(element, action) }
 
     private var twoPane: Boolean = false
@@ -62,7 +62,7 @@ class ItemListActivity : AppCompatActivity() {
     }
 
     private fun setupAdapter() {
-        adapter = TopListingAdapter(::onElementCLick)
+        adapter = PostsAdapter(::onElementCLick)
         item_list.adapter = adapter
         lifecycleScope.launchWhenCreated {
             adapter.loadStateFlow.collectLatest {
@@ -87,7 +87,7 @@ class ItemListActivity : AppCompatActivity() {
     }
 
 
-    fun onElementCLick(element: TopListingElementDto?, action: Int) {
+    fun onElementCLick(element: Post?, action: Int) {
             if (twoPane) {
                 val fragment = ItemDetailFragment().apply {
                     arguments = Bundle().apply {

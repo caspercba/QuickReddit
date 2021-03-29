@@ -13,6 +13,7 @@ fun loadCroppedImage(imageView: ImageView, url: String?) {
         .error(R.drawable.ic_warning)
 
 
+
     Glide.with(imageView.context).load(url).apply(options)
         .into(imageView)
 }

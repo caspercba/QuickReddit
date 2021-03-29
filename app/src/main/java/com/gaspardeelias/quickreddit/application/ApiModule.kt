@@ -35,8 +35,7 @@ class ApiModule(val app: QuickRedditApplication) {
     @Provides
     @Singleton
     fun providesRetrofit2(
-        app: Application,
-        gson: Gson?
+        gson: Gson
     ): Retrofit {
         val httpClient = OkHttpClient.Builder()
         //httpClient.addInterceptor(new LogJsonInterceptor());
@@ -56,11 +55,12 @@ class ApiModule(val app: QuickRedditApplication) {
 
     @Provides
     @Singleton
-    fun provideGson(): Gson? {
+    fun provideGson(): Gson {
         return GsonBuilder()
             .serializeNulls()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .registerTypeAdapter(Date::class.java, DateTypeAdapter())
             .create()
     }
+
 }
