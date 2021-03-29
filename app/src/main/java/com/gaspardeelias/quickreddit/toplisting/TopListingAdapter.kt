@@ -1,22 +1,44 @@
 package com.gaspardeelias.quickreddit.toplisting
 
-import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import com.gaspardeelias.quickreddit.R
-import com.gaspardeelias.quickreddit.core.repository.toplisting.model.TopListingElement
-import com.gaspardeelias.quickreddit.domain.common.BaseEndlessListAdapter2
-import com.gaspardeelias.quickreddit.domain.common.BaseEndlessListViewHolder2
-import com.gaspardeelias.quickreddit.toplisting.TopListingAdapter.Companion.ACTION_DISMISS_ITEM
-import com.gaspardeelias.quickreddit.toplisting.TopListingAdapter.Companion.ACTION_SEE_DETAILS
-import com.gaspardeelias.quickreddit.utils.DateHelper
-import com.gaspardeelias.quickreddit.utils.loadCroppedImage
-import org.jetbrains.anko.onClick
+import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
+import com.gaspardeelias.repo.model.TopListingElementDto
 
 
-class TopListingAdapter(val onClick: (element: TopListingElement, action: Int) -> Unit) :
+class TopListingAdapter(val onClick: (element: TopListingElementDto, action: Int) -> Unit)
+    : PagingDataAdapter<TopListingElementDto, PostViewHolder>(COMPARATOR) {
+
+
+    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
+        return PostViewHolder.create(parent, onClick)
+    }
+
+
+
+    companion object {
+        val COMPARATOR = object : DiffUtil.ItemCallback<TopListingElementDto>() {
+            override fun areContentsTheSame(oldItem: TopListingElementDto, newItem: TopListingElementDto): Boolean =
+                oldItem.title == newItem.title
+
+            override fun areItemsTheSame(oldItem: TopListingElementDto, newItem: TopListingElementDto): Boolean =
+                oldItem.title == newItem.title
+
+            override fun getChangePayload(oldItem: TopListingElementDto, newItem: TopListingElementDto): Any? {
+                return null
+            }
+        }
+    }
+
+
+}
+
+
+/*class TopListingAdapter(val onClick: (element: TopListingElement, action: Int) -> Unit) :
     BaseEndlessListAdapter2<TopListingElement, Nothing>(
         emptyLayout = R.layout.empty_list_generic,
         customLayout = R.layout.item_list_content,
@@ -67,4 +89,4 @@ class TopListingVH(val rootView: View, val onClick: (element: TopListingElement,
         }
     }
 
-}
+}*/

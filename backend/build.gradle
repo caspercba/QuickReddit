@@ -40,9 +40,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
 
     implementation "com.squareup.retrofit2:retrofit:2.6.2"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:2.6.2"
     implementation "com.squareup.retrofit2:converter-gson:2.6.2"
-    implementation project(path: ':core')
 
 
     testImplementation 'junit:junit:4.12'

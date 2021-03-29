@@ -1,4 +1,7 @@
-package com.gaspardeelias.quickreddit.core.service.toplisting.dto
+package com.gaspardeelias.repo.model
+
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
 open class GlobalDto<T>(val kind: String, val data: T)
 
@@ -15,6 +18,7 @@ data class ListingDto<T>(
 
 data class ListingItemDto<T>(val kind: String, val data: T)
 
+@Parcelize
 open class TopListingElementDto(
     var id: String? = null,
     val author: String? = null,
@@ -22,4 +26,4 @@ open class TopListingElementDto(
     val createdUtc: Long? = null,
     val thumbnail: String? = null,
     val numComments: Long = 0
-)
+) : Parcelable

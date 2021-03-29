@@ -6,10 +6,10 @@ import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
-import com.gaspardeelias.quickreddit.core.repository.toplisting.model.TopListingElement
 import com.gaspardeelias.quickreddit.toplisting.FullScreenImageActivity
 import com.gaspardeelias.quickreddit.toplisting.ItemListActivity
 import com.gaspardeelias.quickreddit.utils.loadCroppedImage
+import com.gaspardeelias.repo.model.TopListingElementDto
 import kotlinx.android.synthetic.main.activity_item_detail.*
 import org.jetbrains.anko.onClick
 
@@ -21,7 +21,7 @@ import org.jetbrains.anko.onClick
  */
 class ItemDetailActivity : AppCompatActivity() {
 
-    var element: TopListingElement? = null
+    var element: TopListingElementDto? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +45,7 @@ class ItemDetailActivity : AppCompatActivity() {
             // using a fragment transaction.
             val fragment = ItemDetailFragment().apply {
 
-                element = intent.getParcelableExtra<TopListingElement>(ItemDetailFragment.ARG_ITEM)
+                element = intent.getParcelableExtra<TopListingElementDto>(ItemDetailFragment.ARG_ITEM)
                 arguments = Bundle().apply {
                     putParcelable(ItemDetailFragment.ARG_ITEM,
                             element)
