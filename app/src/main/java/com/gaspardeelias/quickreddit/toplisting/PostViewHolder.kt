@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.gaspardeelias.quickreddit.R
+import com.gaspardeelias.quickreddit.utils.DateHelper
 import com.gaspardeelias.repo.model.Post
 import kotlinx.android.synthetic.main.item_list_content.view.*
 import org.jetbrains.anko.onClick
@@ -36,6 +37,8 @@ class PostViewHolder(val view: View, val onClick: (element: Post) -> Unit): Recy
         Glide.with(view.context).load(post?.thumbnail).apply(options)
             .into(view.id_thumbnail)
         view.onClick { post?.let(onClick) }
+
+        post?.createdUtc?.let { date?.text = DateHelper.getTimeAgo(view.context, it * 1000L)}
     }
 
     companion object {
