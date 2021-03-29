@@ -3,11 +3,11 @@ package com.gaspardeelias.repo
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.gaspardeelias.repo.model.TopListingElementDto
-import com.gaspardeelias.repo.net.TopListingServiceRetrofit
+import com.gaspardeelias.repo.net.QuickRedditRetrofit
 import retrofit2.HttpException
 import java.io.IOException
 
-class PagingKeyedSource(val api: TopListingServiceRetrofit): PagingSource<String, TopListingElementDto>() {
+class PagingKeyedSource(val api: QuickRedditRetrofit): PagingSource<String, TopListingElementDto>() {
     override fun getRefreshKey(state: PagingState<String, TopListingElementDto>): String? {
         return state.anchorPosition?.let { anchorPosition -> state.closestPageToPosition(anchorPosition)?.prevKey
         }

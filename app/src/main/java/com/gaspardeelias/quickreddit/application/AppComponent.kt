@@ -1,7 +1,6 @@
 package com.gaspardeelias.quickreddit.application
 
 import com.gaspardeelias.quickreddit.toplisting.ItemListActivity
-import com.gaspardeelias.quickreddit.toplisting.ItemListActivityVM
 import dagger.Component
 import javax.inject.Singleton
 

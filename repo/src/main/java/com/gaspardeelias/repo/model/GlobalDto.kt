@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 open class GlobalDto<T>(val kind: String, val data: T)
 
-class TopListingDto(kind: String, data: ListingDto<TopListingElementDto>) :
+class PostListing(kind: String, data: ListingDto<TopListingElementDto>) :
     GlobalDto<ListingDto<TopListingElementDto>>(kind, data)
 
 data class ListingDto<T>(

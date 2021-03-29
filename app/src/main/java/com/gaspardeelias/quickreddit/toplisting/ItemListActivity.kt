@@ -9,7 +9,7 @@ import com.gaspardeelias.quickreddit.ItemDetailActivity
 import com.gaspardeelias.quickreddit.ItemDetailFragment
 import com.gaspardeelias.quickreddit.R
 import com.gaspardeelias.quickreddit.application.QuickRedditApplication
-import com.gaspardeelias.quickreddit.domain.getViewModelFromActivity
+import com.gaspardeelias.quickreddit.utils.getViewModelFromActivity
 import com.gaspardeelias.repo.QuickRedditRepo
 import com.gaspardeelias.repo.model.TopListingElementDto
 import kotlinx.android.synthetic.main.activity_item_list.*

@@ -3,7 +3,7 @@ package com.gaspardeelias.quickreddit.application
 import android.app.Application
 import com.gaspardeelias.repo.QuickRedditRepo
 import com.gaspardeelias.repo.QuickRedditRepoImpl
-import com.gaspardeelias.repo.net.TopListingServiceRetrofit
+import com.gaspardeelias.repo.net.QuickRedditRetrofit
 import com.google.gson.*
 import com.google.gson.internal.bind.DateTypeAdapter
 import dagger.Module
@@ -21,15 +21,15 @@ class ApiModule(val app: QuickRedditApplication) {
 
     @Provides
     @Singleton
-    fun providesTopListingRepository(retrofit: Retrofit) : TopListingServiceRetrofit {
-        return TopListingServiceRetrofit.create(retrofit)
+    fun providesTopListingRepository(retrofit: Retrofit) : QuickRedditRetrofit {
+        return QuickRedditRetrofit.create(retrofit)
     }
 
     @Provides
     @Singleton
-    fun provideQuickRedditRepo(topListingServiceRetrofit: TopListingServiceRetrofit)
+    fun provideQuickRedditRepo(quickRedditRetrofit: QuickRedditRetrofit)
     : QuickRedditRepo {
-        return QuickRedditRepoImpl(topListingServiceRetrofit)
+        return QuickRedditRepoImpl(quickRedditRetrofit)
     }
 
     @Provides
