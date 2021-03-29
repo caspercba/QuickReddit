@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.gaspardeelias.repo.model.Post
 
 
-class PostsAdapter(val onClick: (element: Post, action: Int) -> Unit)
+class PostsAdapter(val onClick: (element: Post) -> Unit)
     : PagingDataAdapter<Post, PostViewHolder>(COMPARATOR) {
 
 

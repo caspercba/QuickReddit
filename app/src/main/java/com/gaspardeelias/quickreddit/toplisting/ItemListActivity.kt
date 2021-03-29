@@ -87,7 +87,7 @@ class ItemListActivity : AppCompatActivity() {
     }
 
 
-    fun onElementCLick(element: Post?, action: Int) {
+    fun onElementCLick(element: Post?) {
             if (twoPane) {
                 val fragment = ItemDetailFragment().apply {
                     arguments = Bundle().apply {
