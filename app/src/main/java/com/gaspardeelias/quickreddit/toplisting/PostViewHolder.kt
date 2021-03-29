@@ -39,6 +39,7 @@ class PostViewHolder(val view: View, val onClick: (element: Post) -> Unit): Recy
         view.onClick { post?.let(onClick) }
 
         post?.createdUtc?.let { date?.text = DateHelper.getTimeAgo(view.context, it * 1000L)}
+        dot?.visibility = View.GONE
     }
 
     companion object {

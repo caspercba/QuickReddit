@@ -34,8 +34,6 @@ class ItemListActivity : AppCompatActivity() {
     lateinit var quickRedditRepo: QuickRedditRepo
 
     private lateinit var adapter : PostsAdapter
-    //val adapter = TopListingAdapter { element, action -> onElementCLick(element, action) }
-
     private var twoPane: Boolean = false
 
 
@@ -64,16 +62,19 @@ class ItemListActivity : AppCompatActivity() {
     private fun setupAdapter() {
         adapter = PostsAdapter(::onElementCLick)
         item_list.adapter = adapter
+
         lifecycleScope.launchWhenCreated {
             adapter.loadStateFlow.collectLatest {
-                loadStates -> swipe_refresh.isRefreshing = loadStates.refresh is LoadState.Loading
+                loadStates -> swipe_refresh?.isRefreshing = loadStates.refresh is LoadState.Loading
             }
         }
+
         lifecycleScope.launchWhenCreated {
             viewModel.posts.collectLatest {
                 adapter.submitData(it)
             }
         }
+
         lifecycleScope.launchWhenCreated {
             adapter.loadStateFlow
                 .distinctUntilChangedBy { it.refresh }
@@ -87,7 +88,7 @@ class ItemListActivity : AppCompatActivity() {
     }
 
 
-    fun onElementCLick(element: Post?) {
+    private fun onElementCLick(element: Post?) {
             if (twoPane) {
                 val fragment = ItemDetailFragment().apply {
                     arguments = Bundle().apply {
